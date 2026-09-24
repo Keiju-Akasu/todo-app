@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDoアプリ</title>
+</head>
+<body>
+
+    <h1>ToDoリスト</h1>
+
+    <input type="text" id="todoInput">
+    <input type="date" id="deadlineInput">
+    <button id="addButton">追加</button>
+
+    <ul id="todoList"></ul>
+
+<script>
+    let todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+    function displayTodos() {
+    document.getElementById("todoList").innerHTML = "";
+    
+    todos.forEach(function(todo, index) {
+
+        let li = document.createElement("li");
+        li.textContent = todo.text + " 期限：" + todo.deadline;
+
+        let deleteButton = document.createElement("button");
+        deleteButton.textContent = "削除";
+
+        deleteButton.addEventListener("click", function() {
+    　　　　　todos.splice(index, 1);
+    　　　　　localStorage.setItem("todos", JSON.stringify(todos));
+    　　　　　displayTodos(); 
+          });
+        
+        li.appendChild(deleteButton);  
+        document.getElementById("todoList").appendChild(li);
+
+　　});
+}
+
+　　　　document.getElementById("addButton").addEventListener("click", function() {
+    　　　
+    　　　let todo = document.getElementById("todoInput").value;
+    　　　let deadline = document.getElementById("deadlineInput").value;
+
+    　　　if (todo === "") {
+    　　　　　return;
+　　　　　}
+　　　　let todoData = {
+    text: todo,
+    deadline: deadline
+　　};
+
+　todos.push(todoData);
+
+　　localStorage.setItem("todos", JSON.stringify(todos));
+
+　　displayTodos();
+
+　　document.getElementById("todoInput").value = "";
+　　document.getElementById("deadlineInput").value = "";
+
+});
+
+displayTodos();
+
+</script>
+</body>
+</html>
